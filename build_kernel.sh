@@ -39,8 +39,9 @@ parse_options()
 
 build()
 {
-	make distclean
-	make $KERNEL_DEFCONFIG
+	#make distclean
+	#echo "make $KERNEL_DEFCONFIG"
+	[ -f .config ] || { echo "make $KERNEL_DEFCONFIG"; make $KERNEL_DEFCONFIG;}
 	make $KERNEL_IMAGE -j$JOBS EXTRAVERSION="-$BUILD_VERSION"
 	make $BUILD_DTB EXTRAVERSION="-$BUILD_VERSION"
 	make modules EXTRAVERSION="-$BUILD_VERSION" -j$JOBS
@@ -147,6 +148,7 @@ if [ "$TARGET_BOARD" == "" ]; then
 	print_usage
 else
 	if [ "$KERNEL_DIR" == "" ]; then
+		echo "	. $SCRIPT_DIR/config/$TARGET_BOARD.cfg"
 		. $SCRIPT_DIR/config/$TARGET_BOARD.cfg
 	fi
 fi
